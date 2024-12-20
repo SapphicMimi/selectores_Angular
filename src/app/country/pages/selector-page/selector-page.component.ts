@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CountryService } from '../../services/country.service';
 import { Region } from '../../interfaces/country.interfaces';
@@ -8,10 +8,10 @@ import { Region } from '../../interfaces/country.interfaces';
   templateUrl: './selector-page.component.html',
   styles: ``
 })
-export class SelectorPageComponent {
+export class SelectorPageComponent implements OnInit {
 
   public myForm: FormGroup = this.fb.group({
-    region: ['', Validators.required],
+    region : ['', Validators.required],
     country: ['', Validators.required],
     borders: ['', Validators.required]
   })
@@ -21,8 +21,18 @@ export class SelectorPageComponent {
     private countryService: CountryService
   ) {}
 
+  ngOnInit(): void {
+    this.onRegionChanged();
+  }
+
   get regions(): Region[] {
     return this.countryService.regions;
   }
 
+  public onRegionChanged():void {
+    this.myForm.get('region')!.valueChanges
+      .subscribe(value => {
+        console.log({value})
+      })
+  }
 }
